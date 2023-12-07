@@ -1,5 +1,7 @@
 import os
 import numpy as np
+from sklearn.decomposition import PCA
+
 import matplotlib.pyplot as plt
 from skimage import io, transform
 from sklearn.model_selection import train_test_split,cross_val_score
@@ -59,8 +61,12 @@ for class_label in classes:
 
 
 # Convert lists to NumPy arrays
+pca = PCA(n_components=32)
+# Convert lists to NumPy arrays
 images = np.array(images)
 labels = np.array(labels)
+reduced_images=pca.fit_transform(images)
+
 labels_as_words = [labels_words[label] for label in labels]
 # print(images.shape)  # Print the shape of the resulting array
 # print(labels.data)
@@ -79,7 +85,7 @@ labels_as_words = [labels_words[label] for label in labels]
 #
 # plt.show()
 #trainning
-x=images[:,:2]
+x=reduced_images
 y=labels
 model = LogisticRegression(C=1.0,max_iter=1000)
 model.fit(x,y)
