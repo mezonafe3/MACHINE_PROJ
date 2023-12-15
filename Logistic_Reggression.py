@@ -8,8 +8,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 import seaborn as sns
-from sklearn.metrics import accuracy_score, confusion_matrix, roc_curve, auc, roc_auc_score
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, confusion_matrix, roc_curve, auc
 import matplotlib.pyplot as plt
 
 root_directory = 'Training'
@@ -40,6 +39,7 @@ for class_label in classes:
 
 images=np.array(images)
 labels=np.array(labels)
+#dictionary
 path='classes.txt'
 file=open(path)
 cls={}
@@ -55,8 +55,10 @@ y_train_one_hot=np.eye(num_classes,dtype='int')[y_train.astype('int')]
 y_test_one_hot=np.eye(num_classes,dtype='int')[y_test.astype('int')]
 y_train_flat = np.argmax(y_train_one_hot, axis=1)
 y_test_flat = np.argmax(y_test_one_hot, axis=1)
+
 X_train_reduced=np.reshape(X_train, (X_train.shape[0], -1))
 X_train_scaled = scaler.fit_transform(X_train_reduced)
+
 X_test_reduced = np.reshape(X_test, (X_test.shape[0], -1))
 X_test_scaled = scaler.transform(X_test_reduced)
 #import dat from test file
@@ -79,7 +81,7 @@ labels_for_test_he_flat = np.argmax(labels_for_test_he, axis=1)###########
 images_for_test_reduced=np.reshape(images_for_test, (images_for_test.shape[0], -1))
 images_for_test_scaled = scaler.fit_transform(images_for_test_reduced)#########
 
-model=LogisticRegression(multi_class='ovr')
+model=LogisticRegression(multi_class='ovr', max_iter=1000, C=1.0)
 model.fit(X_train_reduced,y_train_flat)
 
 y_pred = model.predict(X_test_reduced)
@@ -111,7 +113,7 @@ plt.ylabel("True")
 plt.show()
 
 #make prediction on test file
-i=20
+i=12
 data_one=np.expand_dims(images_for_test[i],axis=0)
 test_image_reshape=np.reshape(data_one, (data_one.shape[0], -1))
 test_prediction=model.predict(test_image_reshape)
@@ -121,7 +123,7 @@ plt.title(cls[str(actual_value)], fontsize=16, fontweight='bold')
 plt.axis("off")
 plt.show()
 
-##############roc###########
+##############roc split###########
 y_prob = model.predict_proba(X_test_scaled)
 
 fpr = dict()

@@ -73,9 +73,27 @@ for i in file:
 
 # model train
 X_train=normalized__images
-model=KMeans(n_clusters=3, n_init=9)
+model=KMeans(n_clusters=3,n_init=10,random_state=36)
 model.fit(X_train)
+
+# inertia_values = []
+# cluster_range = range(1, 11)  # You can adjust the range as needed
+
+# for n_clusters in cluster_range:
+#     model = KMeans(n_clusters=n_clusters, n_init=10, random_state=36)
+#     model.fit(X_train)
+#     inertia_values.append(model.inertia_)
+# # Plotting the inertia curve
+# plt.plot(cluster_range, inertia_values, marker='o')
+# plt.title('KMeans elbows Curve')
+# plt.xlabel('Number of Clusters')
+# plt.ylabel('Inertia')
+# plt.show()
+
 cluster_assignments = model.labels_
+
+
+
 
 #random test
 ari = adjusted_rand_score(labels, cluster_assignments)
@@ -94,6 +112,8 @@ plt.scatter(X_test_pca[:, 0], X_test_pca[:, 1], c=test_cluster_assignments, cmap
 plt.title('KMeans Clustering - Test Set')
 plt.xlabel('Principal Component 1')
 plt.ylabel('Principal Component 2')
+centroids_pca = pca.transform(model.cluster_centers_)
+plt.scatter(centroids_pca[:, 0], centroids_pca[:, 1], marker='X', s=200, c='red', label='Centroids')
 plt.show()
 test_cluster_assignments = model.predict(test_images_nor)
 
@@ -124,6 +144,8 @@ for cluster_label in range(len(cls)):
 plt.title('KMeans Clustering - Training Set')
 plt.xlabel('Principal Component 1')
 plt.ylabel('Principal Component 2')
+centroids_pca = pca.transform(model.cluster_centers_)
+plt.scatter(centroids_pca[:, 0], centroids_pca[:, 1], marker='X', s=200, c='red', label='Centroids')
 plt.show()
 
 
