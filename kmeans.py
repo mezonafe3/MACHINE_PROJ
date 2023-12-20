@@ -73,7 +73,7 @@ for i in file:
 
 # model train
 X_train=normalized__images
-model=KMeans(n_clusters=3,n_init=10,random_state=36)
+model=KMeans(n_clusters=3,n_init=10,random_state=42)
 model.fit(X_train)
 
 # inertia_values = []
